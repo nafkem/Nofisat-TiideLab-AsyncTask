@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download</title>
+  </head>
+  <body>
+    <video id="videoPlayer" width="640" height="360" controls>
+      <!-- Video source will be added dynamically -->
+    </video>
+
+    <script>
+      // Function to download a video using a callback
+      function downloadVideo(url, callback) {
+        setTimeout(() => {
+       
+          const videoBlob = new Blob(["Video content"], { type: "video/mp4" });
+          callback(videoBlob);
+        }, 2000); 
+      }
+
+      // Function to play a video from a Blob using promises
+      function playVideo(blob) {
+        return new Promise((resolve, reject) => {
+          const videoPlayer = document.getElementById("videoPlayer");
+          const videoURL = URL.createObjectURL(blob);
+
+          videoPlayer.src =
+            "https://static.videezy.com/system/resources/previews/000/040/982/original/alb_dgraf011_1080p.mp4";
+
+          videoPlayer.onended = () => {
+            resolve("Video playback finished.");
+          };
+
+          videoPlayer.onerror = (error) => {
+            reject(`Error playing video: ${error}`);
+          };
+
+          videoPlayer.play().catch((error) => {
+            reject(`Error playing video: ${error}`);
+          });
+        });
+      }
+
+      // Usage: Replace 'your_video_url.mp4' with the actual video URL
+
+      const videoURL =
+        "https://www.shutterstock.com/shutterstock/videos/1076215751/preview/stock-footage-happy-diverse-business-people-office-workers-team-standing-in-row-looking-at-camera-multiethnic.webm";
+
+      // Download and play the video using async/await
+      videoPlayer.addEventListener("click", async () => {
+        try {
+          console.log("Downloading video...");
+          await downloadVideo(videoURL, async (videoBlob) => {
+            console.log("Video downloaded.");
+            try {
+              console.log("Playing video...");
+              const result = await playVideo(videoBlob);
+              console.log(result);
+            } catch (error) {
+              console.error(error);
+            }
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      });
+      async function downloadAndPlayVideo() {
+        try {
+          console.log("Downloading video...");
+          await downloadVideo(videoURL, async (videoBlob) => {
+            console.log("Video downloaded.");
+            try {
+              console.log("Playing video...");
+              const result = await playVideo(videoBlob);
+              console.log(result);
+            } catch (error) {
+              console.error(error);
+            }
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      downloadAndPlayVideo();
+    </script>
+  </body>
+</html>
